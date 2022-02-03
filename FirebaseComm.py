@@ -10,24 +10,10 @@ config = {
     "databaseURL": "https://embedded-systems-class-default-rtdb.europe-west1.firebasedatabase.app/",
     "storageBucket": "embedded-systems-class.appspot.com"
 }
-redLED = 12                                                                                    #the "redLED" variable refers to the GPIO pin 12 which the red LED is connected on.
-blueLED = 19                                                                                   #the "blueLED" variable refers to the GPIO pin 19 which the blue LED is connected on.
-greenLED = 18                                                                                  #the "greenLED" variable refers to the GPIO pin 18 which the green LED is connected on.
+redLED = 12                            #the "redLED" variable refers to the GPIO pin 12 which the red LED is connected on.
+blueLED = 19                            #the "blueLED" variable refers to the GPIO pin 19 which the blue LED is connected on.
+greenLED = 18                           #the "greenLED" variable refers to the GPIO pin 18 which the green LED is connected on.
 
-GPIO.setmode(GPIO.BCM)                                                                         #Set the GPIO Scheme numbering system to the BCM mode.
-GPIO.setwarnings(False)                                                                        #disable warnings
-
-GPIO.setup(redLED,GPIO.OUT)                                                                    #set the "redLED" variable pin (12) as an output pin.
-GPIO.setup(blueLED,GPIO.OUT)                                                                   #set the "blueLED" variable pin (19) as an output pin.
-GPIO.setup(greenLED,GPIO.OUT)                                                                  #set the "greenLED" variable pin (18) as an output pin.
-
-red_pwm = GPIO.PWM(redLED,50)                                                                #create PWM instance named "red_pwm" with frequency 1000.
-blue_pwm = GPIO.PWM(blueLED,50)                                                              #create PWM instance named "blue_pwm" with frequency 1000.
-green_pwm = GPIO.PWM(greenLED,50)                                                            #create PWM instance named "green_pwm" with frequency 1000.
-
-red_pwm.start(0)                                                                               #start the program with 0% duty cycle (red LED will be OFF).
-blue_pwm.start(0)                                                                              #start the program with 0% duty cycle (blue LED will be OFF).
-green_pwm.start(0)
 
 class FirebaseError(Exception):
     def __init__(self, error):
@@ -41,6 +27,20 @@ class FirebaseCom():
         firebase = pyrebase.initialize_app(config)
         self.db = firebase.database()
         self._log = logging.getLogger('Firebase communication')
+        GPIO.setmode(GPIO.BCM)  # Set the GPIO Scheme numbering system to the BCM mode.
+        GPIO.setwarnings(False)  # disable warnings
+
+        GPIO.setup(redLED, GPIO.OUT)  # set the "redLED" variable pin (12) as an output pin.
+        GPIO.setup(blueLED, GPIO.OUT)  # set the "blueLED" variable pin (19) as an output pin.
+        GPIO.setup(greenLED, GPIO.OUT)  # set the "greenLED" variable pin (18) as an output pin.
+
+        self.red_pwm = GPIO.PWM(redLED, 50)  # create PWM instance named "red_pwm" with frequency 1000.
+        self.blue_pwm = GPIO.PWM(blueLED, 50)  # create PWM instance named "blue_pwm" with frequency 1000.
+        self.green_pwm = GPIO.PWM(greenLED, 50)  # create PWM instance named "green_pwm" with frequency 1000.
+
+        self.red_pwm.start(0)  # start the program with 0% duty cycle (red LED will be OFF).
+        self.blue_pwm.start(0)  # start the program with 0% duty cycle (blue LED will be OFF).
+        self.green_pwm.start(0)
 
     def setLEDs(self):
 
@@ -49,9 +49,9 @@ class FirebaseCom():
         blueValue = self.db.child("LEDctrl").child("BLUE").get().val()
         #self._log.debug("Got value of Mode %s", Mode.val())
         #self._log.debug("Got value of Sample %s", Sample.val())
-        red_pwm.ChangeDutyCycle(redValue)
-        green_pwm.ChangeDutyCycle(greenValue)
-        blue_pwm.ChangeDutyCycle(blueValue)
+        self.red_pwm.ChangeDutyCycle(redValue)
+        self.green_pwm.ChangeDutyCycle(greenValue)
+        self.blue_pwm.ChangeDutyCycle(blueValue)
 
     def getData(self):
         powerstate = self.db.child("TKPdrone").child("powerState").get().val()
