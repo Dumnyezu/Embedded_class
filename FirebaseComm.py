@@ -52,11 +52,13 @@ class FirebaseCom():
         self.red_pwm.ChangeDutyCycle(int(self.redValue))
         self.green_pwm.ChangeDutyCycle(int(self.greenValue))
         self.blue_pwm.ChangeDutyCycle(int(self.blueValue))
+        self.db.child("LEDctrl").child("ack").set("0")
 
     def getData(self):
+        self.ack = self.db.child("LEDctrl").child("ack").get().val()
         self.powerstate = self.db.child("LEDctrl").child("powerState").get().val()
         self._log.debug("Got value of powerstate %s", self.powerstate)
-        if (self.powerstate == "1" ):
+        if (self.powerstate == "1" and self.ack == "1"):
 
             self.setLEDs()
     
