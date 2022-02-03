@@ -44,20 +44,33 @@ class FirebaseCom():
 
     def setLEDs(self):
 
-        redValue = self.db.child("LEDctrl").child("RED").get().val()
-        greenValue = self.db.child("LEDctrl").child("GREEN").get().val()
-        blueValue = self.db.child("LEDctrl").child("BLUE").get().val()
-        #self._log.debug("Got value of Mode %s", Mode.val())
+        self.redValue = self.db.child("LEDctrl").child("RED").get().val()
+        self.greenValue = self.db.child("LEDctrl").child("GREEN").get().val()
+        self.blueValue = self.db.child("LEDctrl").child("BLUE").get().val()
+        self._log.debug("Got value of redValue %s", self.redValue)
         #self._log.debug("Got value of Sample %s", Sample.val())
-        self.red_pwm.ChangeDutyCycle(redValue)
-        self.green_pwm.ChangeDutyCycle(greenValue)
-        self.blue_pwm.ChangeDutyCycle(blueValue)
+        self.red_pwm.ChangeDutyCycle(int(self.redValue))
+        self.green_pwm.ChangeDutyCycle(int(self.greenValue))
+        self.blue_pwm.ChangeDutyCycle(int(self.blueValue))
 
     def getData(self):
-        powerstate = self.db.child("TKPdrone").child("powerState").get().val()
-        if (powerstate == "1" ):
-            self._log.debug("Got value of powerstate %s", powerstate)
+        self.powerstate = self.db.child("LEDctrl").child("powerState").get().val()
+        self._log.debug("Got value of powerstate %s", self.powerstate)
+        if (self.powerstate == "1" ):
+
             self.setLEDs()
+    
+    def LEDtest(self):
+        
+        while True:
+            
+            redValue = 50
+            greenValue = 50
+            blueValue = 50
+        
+            self.red_pwm.ChangeDutyCycle(redValue)
+            self.green_pwm.ChangeDutyCycle(greenValue)
+            self.blue_pwm.ChangeDutyCycle(blueValue)    
 
 
 def Timezone_delay(UTC_Date_Time):
@@ -67,4 +80,4 @@ def Timezone_delay(UTC_Date_Time):
     return Date_Time
 
 if __name__ == "__main__":
-    FirebaseCom().getData()
+    FirebaseCom().LEDtest()

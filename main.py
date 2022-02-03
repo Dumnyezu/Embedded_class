@@ -15,6 +15,6 @@ while True:
     try:
 
         FirebaseCom().getData()
-        time.sleep(1)
+        #time.sleep(1)
     except FirebaseError:
         logging.fatal("no represented Firebase data")
