@@ -54,7 +54,9 @@ class FirebaseCom():
         blue_pwm.ChangeDutyCycle(blueValue)
 
     def getData(self):
-        if (self.db.child("TKPdrone").child("powerState").get().val() == "1" ):
+        powerstate = self.db.child("TKPdrone").child("powerState").get().val()
+        if (powerstate == "1" ):
+            self._log.debug("Got value of powerstate %s", powerstate)
             self.setLEDs()
 
 
