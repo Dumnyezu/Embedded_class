@@ -39,32 +39,32 @@ class FirebaseCom():
         self.blue_pwm = GPIO.PWM(blueLED, 50)  # create PWM instance named "blue_pwm" with frequency 1000.
         self.green_pwm = GPIO.PWM(greenLED, 50)  # create PWM instance named "green_pwm" with frequency 1000.
 
-        self.red_pwm.start(20)  # start the program with 0% duty cycle (red LED will be OFF).
-        self.blue_pwm.start(20)  # start the program with 0% duty cycle (blue LED will be OFF).
-        self.green_pwm.start(20)
+        self.red_pwm.start(0)  # start the program with 0% duty cycle (red LED will be OFF).
+        self.blue_pwm.start(0)  # start the program with 0% duty cycle (blue LED will be OFF).
+        self.green_pwm.start(0)
         
         #self.LEDlight_proc = mp.Process(target=self.LEDlooping, args=(0, 0, 0), daemon=False)
 
     def setLEDs(self):
 
-        def setLEDs(self):
-            self.redValue = self.db.child("LEDctrl").child("RED").get().val()
-            self.greenValue = self.db.child("LEDctrl").child("GREEN").get().val()
-            self.blueValue = self.db.child("LEDctrl").child("BLUE").get().val()
-            self.FreqValue = self.db.child("LEDctrl").child("freq").get().val()
-            if (int(self.FreqValue) == 0):
-                self.FreqValue = "10"
-            elif (int(self.FreqValue) > 0):
-                self.red_pwm.ChangeFrequency(int(self.FreqValue))
-                self.green_pwm.ChangeFrequency(int(self.FreqValue))
-                self.blue_pwm.ChangeFrequency(int(self.FreqValue))
-                self.db.child("LEDctrl").child("ack").set("0")
-                self._log.debug("Got value of redValue %s", self.redValue)
-                # self._log.debug("Got value of Sample %s", Sample.val())
-                while (self.db.child("LEDctrl").child("ack").get().val() == "0"):
-                    self.red_pwm.ChangeDutyCycle(int(self.redValue))
-                    self.green_pwm.ChangeDutyCycle(int(self.greenValue))
-                    self.blue_pwm.ChangeDutyCycle(int(self.blueValue))
+        self.redValue = self.db.child("LEDctrl").child("RED").get().val()
+        self.greenValue = self.db.child("LEDctrl").child("GREEN").get().val()
+        self.blueValue = self.db.child("LEDctrl").child("BLUE").get().val()
+        self.FreqValue = self.db.child("LEDctrl").child("freq").get().val()
+        self.db.child("LEDctrl").child("ack").set("0")
+        if (int(self.FreqValue) == 0):
+            self.FreqValue = "10"
+        elif (int(self.FreqValue) > 0):
+            self.red_pwm.ChangeFrequency(int(self.FreqValue))
+            self.green_pwm.ChangeFrequency(int(self.FreqValue))
+            self.blue_pwm.ChangeFrequency(int(self.FreqValue))
+            
+            self._log.debug("Got value of redValue %s", self.redValue)
+            # self._log.debug("Got value of Sample %s", Sample.val())
+            while (self.db.child("LEDctrl").child("ack").get().val() == "0"):
+                self.red_pwm.ChangeDutyCycle(int(self.redValue))
+                self.green_pwm.ChangeDutyCycle(int(self.greenValue))
+                self.blue_pwm.ChangeDutyCycle(int(self.blueValue))
     '''        
         if self.LEDlight_proc.is_alive() == True:
             print("capture_proc is alive")
@@ -79,6 +79,7 @@ class FirebaseCom():
         self.ack = self.db.child("LEDctrl").child("ack").get().val()
         self.powerstate = self.db.child("LEDctrl").child("powerState").get().val()
         self._log.debug("Got value of powerstate %s", self.powerstate)
+        self._log.debug("Got value of ack %s", self.ack)
         if (self.powerstate == "1" and self.ack == "1"):
             self.setLEDs()
 
