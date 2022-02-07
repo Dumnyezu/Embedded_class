@@ -1,5 +1,5 @@
 import pyrebase
-import multiprocessing as mp
+#import multiprocessing as mp
 import RPi.GPIO as GPIO
 import logging
 import time
@@ -43,7 +43,7 @@ class FirebaseCom():
         self.blue_pwm.start(0)  # start the program with 0% duty cycle (blue LED will be OFF).
         self.green_pwm.start(0)
         
-        self.LEDlight_proc = mp.Process(target=self.LEDlooping, args=(0, 0, 0), daemon=False)
+        #self.LEDlight_proc = mp.Process(target=self.LEDlooping, args=(0, 0, 0), daemon=False)
 
     def setLEDs(self):
 
@@ -62,7 +62,7 @@ class FirebaseCom():
             
 
             # self._log.debug("Got value of Sample %s", Sample.val())
-        '''    
+
             while (self.db.child("LEDctrl").child("ack").get().val() == "0"):
                 self.red_pwm.ChangeDutyCycle(int(self.redValue))
                 self.green_pwm.ChangeDutyCycle(int(self.greenValue))
@@ -76,6 +76,7 @@ class FirebaseCom():
             self.LEDlight_proc = mp.Process(target=self.LEDlooping, args=(self.redValue,
                             self.greenValue, self.blueValue), daemon=False)
             self.LEDlight_proc.start()
+        '''
 
     def getData(self):
         self.ack = self.db.child("LEDctrl").child("ack").get().val()
