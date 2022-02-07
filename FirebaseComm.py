@@ -47,6 +47,10 @@ class FirebaseCom():
         self.redValue = self.db.child("LEDctrl").child("RED").get().val()
         self.greenValue = self.db.child("LEDctrl").child("GREEN").get().val()
         self.blueValue = self.db.child("LEDctrl").child("BLUE").get().val()
+        self.FreqValue = self.db.child("LEDctrl").child("freq").get().val()
+        self.red_pwm = GPIO.PWM(redLED, self.FreqValue)  # create PWM instance named "red_pwm" with frequency 1000.
+        self.blue_pwm = GPIO.PWM(blueLED, self.FreqValue)  # create PWM instance named "blue_pwm" with frequency 1000.
+        self.green_pwm = GPIO.PWM(greenLED, self.FreqValue)
         self.db.child("LEDctrl").child("ack").set("0")
         self._log.debug("Got value of redValue %s", self.redValue)
         #self._log.debug("Got value of Sample %s", Sample.val())
