@@ -55,9 +55,10 @@ class FirebaseCom():
             self.green_pwm.ChangeFrequency(int(self.FreqValue))
             self.blue_pwm.ChangeFrequency(int(self.FreqValue))
             self.db.child("LEDctrl").child("ack").set("0")
+            self.ack_bool = False
             self._log.debug("Got value of redValue %s", self.redValue)
             #self._log.debug("Got value of Sample %s", Sample.val())
-            while(self.db.child("LEDctrl").child("ack").get().val() == "0"):
+            while(self.ack_bool == False):
                 self.red_pwm.ChangeDutyCycle(int(self.redValue))
                 self.green_pwm.ChangeDutyCycle(int(self.greenValue))
                 self.blue_pwm.ChangeDutyCycle(int(self.blueValue))
@@ -68,7 +69,7 @@ class FirebaseCom():
         self.powerstate = self.db.child("LEDctrl").child("powerState").get().val()
         self._log.debug("Got value of powerstate %s", self.powerstate)
         if (self.powerstate == "1" and self.ack == "1"):
-
+            self.ack_bool = True
             self.setLEDs()
     
     def LEDtest(self):
