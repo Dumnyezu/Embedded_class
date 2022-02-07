@@ -51,7 +51,7 @@ class FirebaseCom():
         self._log.debug("Got value of redValue %s", self.redValue)
         #self._log.debug("Got value of Sample %s", Sample.val())
         while(self.db.child("LEDctrl").child("ack").get().val() == "0"):
-            self.red_pwm.ChangeDutyCycle(self.redValue)
+            self.red_pwm.ChangeDutyCycle(int(self.redValue))
             self.green_pwm.ChangeDutyCycle(int(self.greenValue))
             self.blue_pwm.ChangeDutyCycle(int(self.blueValue))
 
