@@ -5,10 +5,10 @@ import time
 from datetime import datetime, timezone, timedelta
 
 config = {
-    "apiKey": "AIzaSyDZGTI2vQjxRPLlxF0_X9ED8bzdEbi7iQk",
-    "authDomain": "embedded-systems-class.firebaseapp.com",
-    "databaseURL": "https://embedded-systems-class-default-rtdb.europe-west1.firebasedatabase.app/",
-    "storageBucket": "embedded-systems-class.appspot.com"
+    "apiKey": "AIzaSyAsihnuak9mBCZA-CIFXZNsOjCHjozqRI0",
+    "authDomain": "embedded-class2.firebaseapp.com",
+    "databaseURL": "https://embedded-class2-default-rtdb.firebaseio.com/",
+    "storageBucket": "embedded-class2.appspot.com"
 }
 redLED = 12                            #the "redLED" variable refers to the GPIO pin 12 which the red LED is connected on.
 blueLED = 19                            #the "blueLED" variable refers to the GPIO pin 19 which the blue LED is connected on.
