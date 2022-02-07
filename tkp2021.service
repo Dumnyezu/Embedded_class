@@ -1,0 +1,14 @@
+[Unit]
+Description=EmbeddedClass-service
+After=multi-user.target
+Requires=network.target
+
+[Service]
+User=pi
+Type=idle
+Restart=no
+WorkingDirectory=/home/pi/REPOS/Embedded_class/
+ExecStart=/usr/bin/python3 -u main.py
+
+[Install]
+WantedBy=multi-user.target
