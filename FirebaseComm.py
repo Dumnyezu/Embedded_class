@@ -47,22 +47,24 @@ class FirebaseCom():
 
     def setLEDs(self):
 
-        self.redValue = self.db.child("LEDctrl").child("RED").get().val()
-        self.greenValue = self.db.child("LEDctrl").child("GREEN").get().val()
-        self.blueValue = self.db.child("LEDctrl").child("BLUE").get().val()
-        self.FreqValue = self.db.child("LEDctrl").child("freq").get().val()
-        if (int(self.FreqValue) == 0):
-            self.FreqValue = "10"
-        elif (int(self.FreqValue) > 0):
-            self.red_pwm.ChangeFrequency(int(self.FreqValue))
-            self.green_pwm.ChangeFrequency(int(self.FreqValue))
-            self.blue_pwm.ChangeFrequency(int(self.FreqValue))
-            self.db.child("LEDctrl").child("ack").set("0")
-            self._log.debug("Got value of redValue %s", self.redValue)
-            while (self.ack == "0"):
-                self.red_pwm.ChangeDutyCycle(int(redValue))
-                self.green_pwm.ChangeDutyCycle(int(greenValue))
-                self.blue_pwm.ChangeDutyCycle(int(blueValue))
+        def setLEDs(self):
+            self.redValue = self.db.child("LEDctrl").child("RED").get().val()
+            self.greenValue = self.db.child("LEDctrl").child("GREEN").get().val()
+            self.blueValue = self.db.child("LEDctrl").child("BLUE").get().val()
+            self.FreqValue = self.db.child("LEDctrl").child("freq").get().val()
+            if (int(self.FreqValue) == 0):
+                self.FreqValue = "10"
+            elif (int(self.FreqValue) > 0):
+                self.red_pwm.ChangeFrequency(int(self.FreqValue))
+                self.green_pwm.ChangeFrequency(int(self.FreqValue))
+                self.blue_pwm.ChangeFrequency(int(self.FreqValue))
+                self.db.child("LEDctrl").child("ack").set("0")
+                self._log.debug("Got value of redValue %s", self.redValue)
+                # self._log.debug("Got value of Sample %s", Sample.val())
+                while (self.db.child("LEDctrl").child("ack").get().val() == "0"):
+                    self.red_pwm.ChangeDutyCycle(int(self.redValue))
+                    self.green_pwm.ChangeDutyCycle(int(self.greenValue))
+                    self.blue_pwm.ChangeDutyCycle(int(self.blueValue))
     '''        
         if self.LEDlight_proc.is_alive() == True:
             print("capture_proc is alive")
