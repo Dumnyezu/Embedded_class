@@ -38,9 +38,9 @@ class FirebaseCom():
         self.blue_pwm = GPIO.PWM(blueLED, 50)  # create PWM instance named "blue_pwm" with frequency 1000.
         self.green_pwm = GPIO.PWM(greenLED, 50)  # create PWM instance named "green_pwm" with frequency 1000.
 
-        self.red_pwm.start(0)  # start the program with 0% duty cycle (red LED will be OFF).
-        self.blue_pwm.start(0)  # start the program with 0% duty cycle (blue LED will be OFF).
-        self.green_pwm.start(0)
+        #self.red_pwm.start(0)  # start the program with 0% duty cycle (red LED will be OFF).
+        #self.blue_pwm.start(0)  # start the program with 0% duty cycle (blue LED will be OFF).
+        #self.green_pwm.start(0)
 
     def setLEDs(self):
 
@@ -49,9 +49,9 @@ class FirebaseCom():
         self.blueValue = self.db.child("LEDctrl").child("BLUE").get().val()
         self._log.debug("Got value of redValue %s", self.redValue)
         #self._log.debug("Got value of Sample %s", Sample.val())
-        self.red_pwm.ChangeDutyCycle(int(self.redValue))
-        self.green_pwm.ChangeDutyCycle(int(self.greenValue))
-        self.blue_pwm.ChangeDutyCycle(int(self.blueValue))
+        self.red_pwm.start(int(self.redValue))
+        self.green_pwm.start(int(self.greenValue))
+        self.blue_pwm.start(int(self.blueValue))
         self.db.child("LEDctrl").child("ack").set("0")
 
     def getData(self):
